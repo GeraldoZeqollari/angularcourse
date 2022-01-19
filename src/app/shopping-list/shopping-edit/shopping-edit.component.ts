@@ -1,5 +1,6 @@
-import { Component, ElementRef, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Ingredient } from 'src/app/shared/ingredient.model';
+import { ShoppingListService } from '../shopping-list.service';
 
 
 @Component({
@@ -7,31 +8,35 @@ import { Ingredient } from 'src/app/shared/ingredient.model';
   templateUrl: './shopping-edit.component.html',
   styleUrls: ['./shopping-edit.component.css']
 })
-export class ShoppingEditComponent implements OnInit {
+export class ShoppingEditComponent implements  AfterViewInit
 
-  @ViewChild('nameInputRef', {static: false})  nameInputRef!: ElementRef;
-  @ViewChild('amountInputRef' , {static: false}) amountInputRef!: ElementRef;
-  @Output() ingredientAdded = new EventEmitter<Ingredient>();
+ {
 
-  constructor() {
+  @ViewChild('nameInputRef', {static: false}) nameInputRef!: ElementRef;
+  @ViewChild('amountInputRef', {static: false}) amountInputRef!: ElementRef;
+
+  constructor(private slService: ShoppingListService) {
 
   }
 
-  ngOnInit(): void {
-    // this.nameInputRef.changes.subscribe((changes: any) => console.log(changes));
-    // this.amountInputRef.changes.subscribe((changes: any) => console.log(changes));
+  // ngOnInit() {
+
+  // }
+  ngAfterViewInit() {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
+
   }
 
 
   onAddItem(){
 
-    const ingName = this.nameInputRef.nativeElement.value.;
-    const ingAmount = this.amountInputRef.nativeElement.value.;
+    const ingName = this.nameInputRef.nativeElement.value;
+    const ingAmount = this.amountInputRef.nativeElement.value;
     const newIngredient = new Ingredient(ingName,ingAmount);
 
-    this.ingredientAdded.emit(newIngredient);
+    this.slService.addIngredient(newIngredient);
   }
-
 
 
 }
